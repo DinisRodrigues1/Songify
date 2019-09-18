@@ -14,7 +14,7 @@ class App extends Component {
       <Router>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path={`/:id`} component={songDetails} />
+          <Route path={`/song/:id`} component={songDetails} />
           <GlobalStyle />
         </Switch>
       </Router>

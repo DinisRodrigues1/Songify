@@ -9,8 +9,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: #212121;
         font-family: 'Univers', sans-serif;
         color: white;
-        margin: 3rem auto;
-        max-width: 70%;
+        
     }
 `
 //Last two are experimental
