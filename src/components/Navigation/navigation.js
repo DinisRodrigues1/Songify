@@ -38,11 +38,12 @@ const Nav = styled.nav`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-top: thin solid black;
     
 `
 const NaviLink = styled(NavLink)`
     text-decoration: none;
-    color: #b0b0b0;
+    color: #bababa;
     margin: 5%;
     
     
@@ -72,7 +73,7 @@ class Navigation extends Component {
 
         return(
             <Nav>
-                <NaviLink><Home size="27" title="Homepage"/><LinkTxt>Home</LinkTxt></NaviLink>
+                <NaviLink to="/"><Home size="27" title="Homepage"/><LinkTxt>Home</LinkTxt></NaviLink>
                 <NaviLink><User size="27" title="User page"/><LinkTxt>User</LinkTxt></NaviLink>
                 <NaviLink><Music size="27" title="Music Library"/><LinkTxt>Library</LinkTxt></NaviLink>
             </Nav>

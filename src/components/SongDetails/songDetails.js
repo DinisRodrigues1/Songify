@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import GlobalStyle from "../../globalStyles/globalStyles";
+import Navigation from "../Navigation/navigation";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { longStackSupport } from "q";
+import axios from "axios";
 
 //Page Styling
 const sizes = {
@@ -26,7 +28,7 @@ const DetailContainer = styled.div`
   display: grid;
   grid-gap: 30px 30px;
   grid-template-columns: 200px 650px;
-  grid-template-rows: 200px 300px;
+  grid-template-rows: 200px 200px;
   justify-items: stretch;
   align-items: start;
   margin: 3rem auto;
@@ -36,13 +38,13 @@ const DetailContainer = styled.div`
 const Img = styled.img`
   max-height: 100%;
   max-width: 100%;
+  border: thin solid black;
 `;
 
 const SongName = styled.h1`
   font-weight: 900;
   color: white;
   text-decoration: none;
-
 `;
 const FadedTxt = styled.span`
   font-size: 0.9rem;
@@ -83,6 +85,16 @@ left: 0;
 left: 5px;
 top: 0;
 }
+`;
+
+const LinkTo = styled.a`
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
 const FavTxt = styled.span``;
@@ -130,48 +142,59 @@ const FavoriteBtn = styled.a`
  
 }`;
 
+const SongTxt = styled.p`
+  margin-top: 0;`
+
 class songDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: []
+      song: []
     };
   }
 
   componentDidMount() {
     console.log(this.props.location.params);
-    let info = this.props.location.params.test;
-    fetch(`https://songs-api-ubiwhere.now.sh/api/songs/${info}`)
-      .then(response => response.json())
-      .then(data => this.setState({ data }));
+    let info = this.props.location.params.song;
+    axios
+      .get(`https://songs-api-ubiwhere.now.sh/api/songs/${info}`)
+      .then(res => {
+        const song = res.data;
+        this.setState({ song });
+      });
   }
 
   render() {
-    let detail = this.state.data;
+    let detail = this.state.song;
     console.log(detail);
     return (
-      <DetailContainer>
-        <div>
-          <Img src={detail.imgUrl} />
-        </div>
-        <div>
-          <p>Song</p>
-          <SongName>{detail.title}</SongName>
-          <p>
-            <FadedTxt>By</FadedTxt> {detail.artist}
-          </p>
-          <FadedTxt>
-            {detail.year}
-            <FavoriteBtn>
-              <FavTxt>Favorite</FavTxt>
-              <Heart></Heart>
-            </FavoriteBtn>
-          </FadedTxt>
-          <p><FadedTxt>Lyrics:</FadedTxt> {detail.webUrl}</p>
-        </div>
-        <GlobalStyle />
-      </DetailContainer>
+      <>
+        <Navigation />
+        <DetailContainer>
+          <div>
+            <Img src={detail.imgUrl} />
+          </div>
+          <div>
+            <SongTxt>Song</SongTxt>
+            <SongName>{detail.title}</SongName>
+            <p>
+              <FadedTxt>By</FadedTxt> {detail.artist}
+            </p>
+            <FadedTxt>
+              {detail.year}
+              <FavoriteBtn>
+                <FavTxt>Favorite</FavTxt>
+                <Heart></Heart>
+              </FavoriteBtn>
+            </FadedTxt>
+            <p>
+              <LinkTo href={detail.webUrl}>Read the lyrics</LinkTo>
+            </p>
+          </div>
+          <GlobalStyle />
+        </DetailContainer>
+      </>
     );
   }
 }
