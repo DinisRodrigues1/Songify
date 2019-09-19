@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import GlobalStyle from "../../globalStyles/globalStyles";
+import {Home} from "styled-icons/boxicons-solid/Home"
+import {Music} from "styled-icons/boxicons-solid/Music"
+import {User} from "styled-icons/boxicons-solid/User"
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 
 
@@ -27,7 +30,32 @@ const Nav = styled.nav`
     width: 100%;
     margin: 0 auto;
     height: 10vh;
-    background-image: repeating-linear-gradient(#4d4d4d 10%, #2b2b2b 10%)    
+    background-image: repeating-linear-gradient(#4d4d4d 10%, #2b2b2b 10%);
+    position: fixed;
+    bottom: 0;    
+    margin-top: 10%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+`
+const NaviLink = styled(NavLink)`
+    text-decoration: none;
+    color: #b0b0b0;
+    margin: 5%;
+    
+    
+    &:hover {
+      color: white;
+      transition: color, 0.8s, linear 0.2s;
+      
+    }
+`
+const LinkTxt = styled.span`
+    vertical-align: middle;
+    margin-left: 1%;
+    
 `
 
 class Navigation extends Component {
@@ -44,8 +72,9 @@ class Navigation extends Component {
 
         return(
             <Nav>
-                <NavLink>Home</NavLink>
-                <NavLink>User</NavLink>
+                <NaviLink><Home size="27" title="Homepage"/><LinkTxt>Home</LinkTxt></NaviLink>
+                <NaviLink><User size="27" title="User page"/><LinkTxt>User</LinkTxt></NaviLink>
+                <NaviLink><Music size="27" title="Music Library"/><LinkTxt>Library</LinkTxt></NaviLink>
             </Nav>
         )
       }

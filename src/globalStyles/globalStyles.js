@@ -9,6 +9,8 @@ const GlobalStyle = createGlobalStyle`
         background-color: #212121;
         font-family: 'Univers', sans-serif;
         color: white;
+        padding: 0;
+        margin: 0;
         
     }
 `

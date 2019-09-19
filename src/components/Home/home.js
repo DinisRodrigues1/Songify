@@ -49,7 +49,7 @@ const HomeContainer = styled.div`
   justify-items: center;
   align-items: start;
   justify-content: space-evenly;
-  margin: 3rem auto;
+  margin: 0 auto;
   max-width: 70%;
 `;
 

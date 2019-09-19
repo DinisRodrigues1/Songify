@@ -25,10 +25,12 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 const DetailContainer = styled.div`
   display: grid;
   grid-gap: 30px 30px;
-  grid-template-columns: 200px 600px;
+  grid-template-columns: 200px 650px;
   grid-template-rows: 200px 300px;
   justify-items: stretch;
   align-items: start;
+  margin: 3rem auto;
+  max-width: 70%;
 `;
 
 const Img = styled.img`
@@ -166,6 +168,7 @@ class songDetails extends Component {
               <Heart></Heart>
             </FavoriteBtn>
           </FadedTxt>
+          <p><FadedTxt>Lyrics:</FadedTxt> {detail.webUrl}</p>
         </div>
         <GlobalStyle />
       </DetailContainer>
