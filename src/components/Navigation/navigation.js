@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
-import GlobalStyle from "../../globalStyles/globalStyles";
+import GlobalStyle from "../../GlobalStyles/globalStyles";
 import {Home} from "styled-icons/boxicons-solid/Home"
 import {Music} from "styled-icons/boxicons-solid/Music"
 import {User} from "styled-icons/boxicons-solid/User"
@@ -52,6 +52,10 @@ const NaviLink = styled(NavLink)`
       transition: color, 0.8s, linear 0.2s;
       
     }
+
+    &.active {
+      color: white;
+    }
 `
 const LinkTxt = styled.span`
     vertical-align: middle;
@@ -73,9 +77,9 @@ class Navigation extends Component {
 
         return(
             <Nav>
-                <NaviLink to="/"><Home size="27" title="Homepage"/><LinkTxt>Home</LinkTxt></NaviLink>
-                <NaviLink><User size="27" title="User page"/><LinkTxt>User</LinkTxt></NaviLink>
-                <NaviLink><Music size="27" title="Music Library"/><LinkTxt>Library</LinkTxt></NaviLink>
+                <NaviLink exact to="/"><Home size="27" title="Homepage"/><LinkTxt>Home</LinkTxt></NaviLink>
+                <NaviLink to="/login"><User size="27" title="User page"/><LinkTxt>User</LinkTxt></NaviLink>
+                <NaviLink to="library"><Music size="27" title="Music Library"/><LinkTxt>Library</LinkTxt></NaviLink>
             </Nav>
         )
       }

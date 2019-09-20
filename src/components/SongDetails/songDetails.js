@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
-import GlobalStyle from "../../globalStyles/globalStyles";
+import GlobalStyle from "../../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { longStackSupport } from "q";
