@@ -5,11 +5,16 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import songDetails from "./components/SongDetails/songDetails.js";
 import Login from "./components/Login/login.js";
 import Library from "./components/Library/library.js";
+import { connect } from "react-redux";
+import { getUser } from "./actions/loginActions";
 
 class App extends Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount = () => {
+    this.props.getUser();
+  };
 
   render() {
     return (
@@ -26,4 +31,11 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  getUser: () => dispatch(getUser())
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

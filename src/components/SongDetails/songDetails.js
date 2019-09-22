@@ -3,8 +3,9 @@ import styled, { css } from "styled-components";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { longStackSupport } from "q";
+import { connect } from "react-redux";
 import axios from "axios";
+import { getSong } from "../../actions/songActions";
 
 //Page Styling
 const sizes = {
@@ -143,7 +144,8 @@ const FavoriteBtn = styled.a`
 }`;
 
 const SongTxt = styled.p`
-  margin-top: 0;`
+  margin-top: 0;
+`;
 
 class songDetails extends Component {
   constructor(props) {
@@ -154,20 +156,14 @@ class songDetails extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.props.location.params);
-    let info = this.props.location.params.song;
-    axios
-      .get(`https://songs-api-ubiwhere.now.sh/api/songs/${info}`)
-      .then(res => {
-        const song = res.data;
-        this.setState({ song });
-      });
+  componentDidMount = () => {
+      this.props.getSong(this.props.location.params.song);
+
   }
 
   render() {
-    let detail = this.state.song;
-    console.log(detail);
+    let detail = this.props.detail;
+    console.log(this.props)
     return (
       <>
         <Navigation />
@@ -199,4 +195,14 @@ class songDetails extends Component {
   }
 }
 
-export default songDetails;
+const mapStateToProps = (state) => {
+  return {
+    detail: state.songs.item
+  };
+};
+
+
+export default connect(
+  mapStateToProps,
+  { getSong }
+)(songDetails);

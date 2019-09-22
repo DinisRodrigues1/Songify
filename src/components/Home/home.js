@@ -3,7 +3,9 @@ import styled, { css } from "styled-components";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Navigation from "../Navigation/navigation";
-import axios from "axios";
+import { connect } from "react-redux";
+import { getSongs } from "../../actions/songActions";
+
 
 //Page Styling
 const sizes = {
@@ -63,33 +65,20 @@ const PageName = styled.h1`
   margin: 2% auto 0 auto;
 `;
 
-
 class Home extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      songs: []
-    };
-  }
-
-  componentDidMount() {
-    axios.get("https://songs-api-ubiwhere.now.sh/api/songs")
-      .then(res => {
-        const songs = res.data;
-        this.setState ({ songs })
-      })
+  componentDidMount = () => {
+    this.props.getSongs();
   }
 
   render() {
-    const songs = this.state.songs
+    console.log(this.props)
+    const songs = this.props.songs;
     console.log(songs);
     return (
       <>
         <Navigation />
         <PageName>Home</PageName>
         <HomeContainer>
-        
           {songs.map(item => (
             <div key={item.id}>
               <Img src={item.imgUrl} />
@@ -110,4 +99,14 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    songs: state.songs.items
+  };
+};
+
+
+export default connect(
+  mapStateToProps,
+  { getSongs }
+)(Home);

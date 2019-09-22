@@ -5,9 +5,13 @@ import {
   BrowserRouter as Router,
   Route,
   Link,
-  NavLink
+  NavLink,
+  Redirect
 } from "react-router-dom";
 import Navigation from "../Navigation/navigation";
+import { connect } from "react-redux";
+import { userCheck } from "../../actions/loginActions"
+
 
 //Page Styling
 const sizes = {
@@ -31,54 +35,118 @@ const LoginContainer = styled.div`
   display: grid;
   grid-gap: 30px 30px;
   grid-template-columns: 1fr;
-  grid-template-rows: 2fr 1fr;
+  grid-template-rows: 2fr 2fr 1fr;
   justify-items: center;
   align-items: start;
   justify-content: space-evenly;
   margin: 5% auto 5% auto;
-  max-width: 70%;
+  max-width: 82%;
   justify-items: center;
-
 `;
 const PageName = styled.h1`
-  max-width: 70%;
+  max-width: 82%;
   margin: 2% auto 0 auto;
 `;
 
 const Input = styled.input`
   width: 20vw;
-`
+  border: solid thin black;
+  border-radius: 0.8em;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.5em 0 0.5em 0.5em;
+`;
+const InputTitle = styled.h2``;
+const Submit = styled.input`
+  background-color: #1e2d75;
+  border: solid thin black;
+  color: white;
+  border-radius: 1em;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.5em 1.5em 0.5em 1.5em;
+  font-size: 0.9em;
+  transition: background-color 0.5s linear;
+  cursor: pointer;
+
+  &: hover {
+    background-color: #293b91;
+  }
+`;
 
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.inputRef = React.createRef();
 
     this.state = {
-      data: []
+      email: "",
+      password: "",
+      token: ""
     };
   }
 
+
+  handleInputChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    this.props.userCheck(this.state);
+    
+  };
   render() {
+    console.log(this.props)
+    const token = localStorage.token;
+    
     return (
+      
       <>
-        <Navigation/>
+        <Navigation />
         <PageName>Login</PageName>
-        <LoginContainer>
-          <form>
-          <div>
-          <h2>Username</h2>
-          <Input type="text" name="username"/>
-          </div>
-          <div>
-          <h2>Password</h2>  
-          <Input type="password" name="password"/>
-          </div>
-          </form>
-        </LoginContainer>
+        <form onSubmit={this.onSubmit}>
+          <LoginContainer>
+            <div>
+              <InputTitle>E-mail</InputTitle>
+              <Input
+                ref={this.inputRef}
+                type="text"
+                name="email"
+                value={this.state.email}
+                onMouseEnter={() => {
+                  this.inputRef.current.focus();
+                }}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div>
+              <InputTitle>Password</InputTitle>
+              <Input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div>
+              <Submit
+                type="submit"
+                name="submit button"
+                value="Entrar"
+              />
+            </div>
+          </LoginContainer>
+        </form>
         <GlobalStyle />
       </>
     );
   }
 }
 
-export default Login;
+const mapDispatchToProps = dispatch => ({
+  userCheck: userInfo => dispatch(userCheck(userInfo))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Login);
