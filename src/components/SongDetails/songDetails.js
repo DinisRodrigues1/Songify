@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import GlobalStyle from "../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 import {
   getSong,
   addToFavorites,
@@ -282,7 +282,7 @@ class songDetails extends Component {
     if (favorites.includes(this.props.location.params.song)) {
       this.setState = prevState => ({
         isFavorite: !prevState.isFavorite
-      })
+      });
     }
 
     return (
@@ -331,7 +331,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter( connect(
-  mapStateToProps,
-  { getSong, addToFavorites, removeFavorite, getSongFavorites }
-)(songDetails));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { getSong, addToFavorites, removeFavorite, getSongFavorites }
+  )(songDetails)
+);
