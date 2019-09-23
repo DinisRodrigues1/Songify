@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Home from "./components/Home/home.js";
-import GlobalStyle from "./GlobalStyles/globalStyles.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import songDetails from "./components/SongDetails/songDetails.js";
 import Login from "./components/Login/login.js";
@@ -23,7 +22,6 @@ class App extends Component {
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
           <Route path="/library" component={Library} />
-          <GlobalStyle />
         </Switch>
       </Router>
     );
