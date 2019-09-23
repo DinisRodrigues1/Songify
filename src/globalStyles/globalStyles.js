@@ -14,6 +14,6 @@ const GlobalStyle = createGlobalStyle`
         
     }
 `
-//Last two are experimental
+  
 
 export default GlobalStyle

@@ -10,9 +10,6 @@ import { connect } from "react-redux";
 import { getUser } from "./actions/loginActions";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount = () => {
     this.props.getUser();
   };

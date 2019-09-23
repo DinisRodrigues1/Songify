@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers/rootReducer"
-import { loadState, saveState } from "./StateLoader/localStorage"
 
-const initialState = loadState();
+const initialState = "";
 
 const middleware = [thunk];
 
@@ -13,10 +12,6 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-store.subscribe(() => {
-    saveState({
-        song: store.getState().song
-    })
-})
+
 
 export default store;

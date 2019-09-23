@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
 import styled, { css } from "styled-components";
 import Navigation from "../Navigation/navigation";
-import { BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUser } from "../../actions/loginActions";
 import { getSongFavorites, removeFavorite } from "../../actions/songActions";
@@ -45,13 +45,29 @@ const ArtName = styled.p`
 const LibraryContainer = styled.div`
   display: grid;
   grid-gap: 50px 50px;
-  grid-template-columns: 180px 180px 180px 180px 180px;
-  grid-template-rows: 250px 250px 250px 250px 250px;
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 2fr;
   justify-items: center;
   align-items: start;
   justify-content: space-evenly;
-  margin: 5% auto 5% auto;
+  margin: 5% auto 10% auto;
   max-width: 82%;
+  
+  ${media.desktop`
+  width: 90%;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 2fr;
+  margin: 15% auto 5% auto;`}
+
+  ${media.tablet`
+  width: 92%;
+  `}
+
+  ${media.phone`
+  width: 95%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr;
+  margin: 12% auto 30% auto;`}
 `;
 
 const Img = styled.img`
@@ -63,6 +79,16 @@ const Img = styled.img`
 const PageName = styled.h1`
   max-width: 82%;
   margin: 2% auto 0 auto;
+
+  ${media.desktop`
+  width: 90%;`}
+
+  ${media.tablet`
+  width: 92%;
+  `}
+
+  ${media.phone`
+  width: 95%;`}
 `;
 
 const Heart = styled.span`
@@ -102,7 +128,7 @@ top: 0;
 
 const FavTxt = styled.span``;
 
-const FavoriteBtn = styled.a`
+const UnfavoriteBtn = styled.a`
   background: #ffffff no-repeat -12px center;
   border: 1px solid black;
   border-radius: 4px;
@@ -145,15 +171,16 @@ const FavoriteBtn = styled.a`
 }`;
 
 export class Library extends Component {
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.props.getUser();
-    this.props.getSongFavorites();
+    await this.props.getSongFavorites();
+    await this.props.favorite;
   };
 
   handleFavorite = param => e => {
     e.preventDefault();
     this.props.removeFavorite(param);
-    console.log("delet dis nefew");
+    this.props.getSongFavorites();
   };
 
   render() {
@@ -163,32 +190,41 @@ export class Library extends Component {
     console.log(this.props);
     return (
       <>
-      {!token ? <Redirect to="/"/> :
-      <>
-        <Navigation />
-        <PageName>{user.name}'s Library</PageName>
-        <LibraryContainer>
-          {favs.map(song => (
-            <div key={song.id}>
-              <Img src={song.imgUrl} />
-              <SongName
-                id={song.id}
-                to={{ pathname: `/song/${song.id}`, params: { song: song.id } }}
-              >
-                {song.title}
-              </SongName>
-              <ArtName>{song.artist}</ArtName>
-              <FavoriteBtn onClick={this.handleFavorite(song.id)}>
-                <FavTxt>Unfavorite</FavTxt>
-                <Heart></Heart>
-              </FavoriteBtn>
-            </div>
-          ))}
-          <GlobalStyle />
-        </LibraryContainer>
+        {!token ? (
+          <Redirect to="/" />
+        ) : (
+          <>
+            <Navigation />
+            <PageName>{user.name}'s Library</PageName>
+            {!favs ? (
+              <></>
+            ) : (
+              <LibraryContainer>
+                {favs.map(song => (
+                  <div key={song.id}>
+                    <Img src={song.imgUrl} />
+                    <SongName
+                      id={song.id}
+                      to={{
+                        pathname: `/song/${song.id}`,
+                        params: { song: song.id }
+                      }}
+                    >
+                      {song.title}
+                    </SongName>
+                    <ArtName>{song.artist}</ArtName>
+                    <UnfavoriteBtn onClick={this.handleFavorite(song.id)}>
+                      <FavTxt>Unfavorite</FavTxt>
+                      <Heart></Heart>
+                    </UnfavoriteBtn>
+                  </div>
+                ))}
+                <GlobalStyle />
+              </LibraryContainer>
+            )}
+          </>
+        )}
       </>
-    }
-    </>
     );
   }
 }
@@ -196,7 +232,7 @@ export class Library extends Component {
 const mapStateToProps = state => {
   return {
     user: state.auth.currentUserAuth,
-    favorite: state.songs.item
+    favorite: state.songs.favs
   };
 };
 

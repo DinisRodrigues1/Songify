@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom'
 import {
   getSong,
   addToFavorites,
+  getSongFavorites,
   removeFavorite
 } from "../../actions/songActions";
 
@@ -30,13 +31,27 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 
 const DetailContainer = styled.div`
   display: grid;
-  grid-gap: 30px 30px;
+  grid-gap: 20px;
   grid-template-columns: 200px 650px;
   grid-template-rows: 200px 200px;
   justify-items: stretch;
   align-items: start;
   margin: 3rem auto;
   max-width: 70%;
+
+  ${media.desktop`
+  width: 80%;
+  `}
+  ${media.tablet`
+  grid-template-columns: 2fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  `}
+  ${media.phone`
+  grid-template-columns: 2fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  `}
 `;
 
 const Img = styled.img`
@@ -148,6 +163,85 @@ const FavoriteBtn = styled.a`
 
 const SongTxt = styled.p`
   margin-top: 0;
+  ${media.tablet`
+  display: none;`}
+`;
+
+const UnfavoriteBtn = styled.a`
+margin-left: 10px;
+  background: #ffffff no-repeat -12px center;
+  border: 1px solid black;
+  border-radius: 4px;
+  color: #1e2d75;
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 5px 8px 3px 8px;
+  text-decoration: none;
+  vertical-align: middle;
+  text-transform: uppercase;
+  transition: padding .2s ease, background-position .2s ease, transform .5s ease;;
+
+
+&:${FavTxt} &:${Heart} {
+  margin: 0;
+  padding: 0;
+}
+
+&:hover {
+    transform: scale(1, 1);
+    padding-left: 100px;
+    padding-right: 5px;
+    background-position: 5px center;
+}
+
+& ${FavTxt}:nth-child(1) {
+  position: absolute;
+  left: -100px;
+  transition: left .2s ease;
+  line-height: 12px;
+}
+
+&:hover ${FavTxt}:nth-child(1) {
+  left: 10px;
+}
+ 
+}`;
+const Unheart = styled.span`
+background-color: #1e2d75;
+border-color: black;
+display: inline-block;
+cursor: pointer;
+height: 10px;
+margin: 0 10px;
+position: relative;
+top: 0;
+transform: rotate(-45deg);
+width: 10px;
+}
+
+&:before,
+&:after {
+content: "";
+background-color: #1e2d75;
+border-color: black;
+border-radius: 50%;
+height: 10px;
+position: absolute;
+width: 10px;
+}
+
+&:before {
+top: -5px;
+left: 0;
+}
+
+&:after {
+left: 5px;
+top: 0;
+}
 `;
 
 class songDetails extends Component {
@@ -155,23 +249,42 @@ class songDetails extends Component {
     super(props);
 
     this.state = {
-      song: []
+      isFavorite: false
     };
   }
 
-  componentDidMount = () => {
-    this.props.getSong(this.props.location.params.song);
-
+  componentDidMount = async () => {
+    await this.props.getSong(this.props.location.params.song);
+    await this.props.getSongFavorites();
   };
 
   handleAdd = e => {
     e.preventDefault();
     this.props.addToFavorites(this.props.location.params.song);
+    this.props.getSongFavorites();
+    this.setState = prevState => ({
+      isFavorite: !prevState.isFavorite
+    });
+  };
+
+  handleRemove = e => {
+    e.preventDefault();
+    this.props.removeFavorite(this.props.location.params.song);
+    this.props.getSongFavorites();
+    this.setState = prevState => ({
+      isFavorite: !prevState.isFavorite
+    });
   };
 
   render() {
     let detail = this.props.detail;
-    console.log(this.props);
+    const favorites = this.props.favorite.map(i => i.id);
+    if (favorites.includes(this.props.location.params.song)) {
+      this.setState = prevState => ({
+        isFavorite: !prevState.isFavorite
+      })
+    }
+
     return (
       <>
         <Navigation />
@@ -187,10 +300,17 @@ class songDetails extends Component {
             </p>
             <FadedTxt>
               {detail.year}
-              <FavoriteBtn onClick={this.handleAdd}>
-                <FavTxt>Favorite</FavTxt>
-                <Heart></Heart>
-              </FavoriteBtn>
+              {favorites.includes(this.props.location.params.song) ? (
+                <UnfavoriteBtn onClick={this.handleRemove}>
+                  <FavTxt>Unfavorite</FavTxt>
+                  <Unheart></Unheart>
+                </UnfavoriteBtn>
+              ) : (
+                <FavoriteBtn onClick={this.handleAdd}>
+                  <FavTxt>Favorite</FavTxt>
+                  <Heart></Heart>
+                </FavoriteBtn>
+              )}
             </FadedTxt>
             <p>
               <LinkTo href={detail.webUrl}>Read the lyrics</LinkTo>
@@ -206,11 +326,12 @@ class songDetails extends Component {
 const mapStateToProps = state => {
   return {
     detail: state.songs.item,
-    auth: state.auth.currentUser
+    auth: state.auth.currentUser,
+    favorite: state.songs.favs
   };
 };
 
-export default connect(
+export default withRouter( connect(
   mapStateToProps,
-  { getSong, addToFavorites, removeFavorite }
-)(songDetails);
+  { getSong, addToFavorites, removeFavorite, getSongFavorites }
+)(songDetails));

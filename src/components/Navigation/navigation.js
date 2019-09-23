@@ -3,13 +3,7 @@ import styled, { css } from "styled-components";
 import { Home } from "styled-icons/boxicons-solid/Home";
 import { Music } from "styled-icons/boxicons-solid/Music";
 import { User } from "styled-icons/boxicons-solid/User";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  NavLink,
-  withRouter
-} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/loginActions";
 
@@ -44,6 +38,17 @@ const Nav = styled.nav`
   justify-content: center;
   align-items: center;
   border-top: thin solid black;
+  z-index: 2;
+  ${media.desktop`
+  height: 10vh`}
+
+  ${media.tablet`
+  height: 10vh
+  `}
+
+  ${media.phone`
+  height: 15vh;
+  `}
 `;
 const NaviLink = styled(NavLink)`
   text-decoration: none;
@@ -58,10 +63,15 @@ const NaviLink = styled(NavLink)`
   &.active {
     color: white;
   }
+  ${media.desktop`
+  font-size: 1.2em`}
 `;
 const LinkTxt = styled.span`
   vertical-align: middle;
   margin-left: 1%;
+
+  ${media.desktop`
+  font-size: 0.9em`}
 `;
 
 class Navigation extends Component {
@@ -77,10 +87,9 @@ class Navigation extends Component {
     e.preventDefault();
     localStorage.removeItem("token");
     this.props.logoutUser();
-    this.setState ({
+    this.setState({
       data: []
-    })
-   
+    });
   };
 
   render() {

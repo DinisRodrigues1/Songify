@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  NavLink,
-  Redirect
-} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Navigation from "../Navigation/navigation";
 import { connect } from "react-redux";
 import { userCheck } from "../../actions/loginActions";
@@ -41,10 +35,35 @@ const LoginContainer = styled.div`
   margin: 5% auto 5% auto;
   max-width: 82%;
   justify-items: center;
+
+  ${media.desktop`
+  width: 90%;
+  grid-gap: 40px 40px;
+  grid-template-columns: 2fr;
+  grid-template-rows: 3fr 3fr 2fr;
+  margin: 15% auto 5% auto;
+
+  `}
+
+  ${media.tablet`
+  width: 92%;`}
+  ${media.phone`
+  width: 95%;
+  margin: 10% auto 30% auto;`}
 `;
 const PageName = styled.h1`
   max-width: 82%;
   margin: 2% auto 0 auto;
+
+  ${media.desktop`
+  width: 90%;`}
+
+  ${media.tablet`
+  width: 92%;
+  `}
+
+  ${media.phone`
+  width: 95%;`}
 `;
 
 const Input = styled.input`
@@ -53,8 +72,20 @@ const Input = styled.input`
   border-radius: 0.8em;
   margin: 0.5em 0 0.5em 0;
   padding: 0.5em 0 0.5em 0.5em;
+
+  ${media.desktop`
+  width: 35vw;`}
+
+  ${media.tablet`
+  width: 40vw;
+  `}
+
+  ${media.phone`
+  width: 65vw`}
 `;
-const InputTitle = styled.h2``;
+const InputTitle = styled.label`
+  font-size: 1.4em;
+`;
 const Submit = styled.input`
   background-color: #1e2d75;
   border: solid thin black;
@@ -69,6 +100,8 @@ const Submit = styled.input`
   &: hover {
     background-color: #293b91;
   }
+  ${media.desktop`
+  font-size: 1.2em;`}
 `;
 
 const LinkTo = styled(Link)`
@@ -110,7 +143,7 @@ class Login extends Component {
   render() {
     console.log(this.props);
     const token = localStorage.token;
-    console.log(this.props.currentUser)
+    console.log(this.props.currentUser);
     return (
       <>
         {token ? (
@@ -122,7 +155,8 @@ class Login extends Component {
             <form onSubmit={this.handleSubmit}>
               <LoginContainer>
                 <div>
-                  <InputTitle>E-mail</InputTitle>
+                  <InputTitle htmlFor="E-mail">E-mail</InputTitle>
+                  <br />
                   <Input
                     ref={this.inputRef}
                     type="text"
@@ -135,7 +169,8 @@ class Login extends Component {
                   />
                 </div>
                 <div>
-                  <InputTitle>Password</InputTitle>
+                  <InputTitle htmlFor="Password">Password</InputTitle>
+                  <br />
                   <Input
                     type="password"
                     name="password"
@@ -150,7 +185,7 @@ class Login extends Component {
                   </p>
                 </div>
                 <div>
-                  <Submit type="submit" name="submit button" value="Entrar" />
+                  <Submit type="submit" name="submit button" value="Login" />
                 </div>
               </LoginContainer>
             </form>

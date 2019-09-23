@@ -7,8 +7,11 @@ import {
 } from "../actions/types";
 
 const initialState = {
+  songs: [],
   items: [],
-  item: []
+  item: [],
+  favs: [],
+  unfav: []
 };
 
 const songReducer = (state = initialState, action) => {
@@ -16,7 +19,7 @@ const songReducer = (state = initialState, action) => {
     case GET_ALL_SONGS:
       return {
         ...state,
-        items: action.payload
+        songs: action.payload
       };
     case GET_SONG:
       return {
@@ -25,15 +28,18 @@ const songReducer = (state = initialState, action) => {
       };
     case GET_FAVORITES:
       return {
-        item: action.payload
+        ...state,
+        favs: action.payload
       };
     case SONG_FAVORITE:
       return {
-        item: action.payload
+        ...state,
+        items: action.payload
       };
     case SONG_UNFAVORITE:
       return {
-        item: action.payload
+        ...state,
+        unfav: action.payload
       };
     default:
       return { ...state };

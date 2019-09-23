@@ -2,7 +2,8 @@ import {
   SONG_FAVORITE,
   SONG_UNFAVORITE,
   GET_SONG,
-  GET_ALL_SONGS
+  GET_ALL_SONGS,
+  GET_FAVORITES
 } from "./types";
 import axios from "axios";
 
@@ -60,10 +61,10 @@ export const getSongFavorites = () => {
                   return values;
                 })
                 .catch(error => {
-                  let x = error;
+                  //error;
                 });
               dispatch({
-                type: GET_SONG,
+                type: GET_FAVORITES,
                 payload: favorites.flat()
               });
             };
@@ -73,34 +74,7 @@ export const getSongFavorites = () => {
     }
   };
 };
-/*
-export const addToFavorites = iden => {
-  return dispatch => {
-   
-  
-    const token = localStorage.token;
-    if (token) {
-      axios
-        .post(`https://songs-api-ubiwhere.now.sh/api/user-favorites/`, {
-            
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            params: {
-            songId: iden
-            }
-        })
-        .then(res => {
-          const result = res.data;
-          dispatch({
-            type: SONG_FAVORITE,
-            payload: result
-          });
-        });
-    }
-  };
-};
-*/
+
 export const addToFavorites = iden => {
   return dispatch => {
     const token = localStorage.token;
@@ -119,11 +93,12 @@ export const addToFavorites = iden => {
           }
         })
         .then(res => {
-          const result = res.data;
+          
+          getSongFavorites();
           dispatch({
-            type: SONG_FAVORITE,
-            payload: result
+            type: SONG_FAVORITE
           });
+          
         });
     }
   };

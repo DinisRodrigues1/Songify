@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navigation from "../Navigation/navigation";
 import { connect } from "react-redux";
 import { getSongs } from "../../actions/songActions";
-
 
 //Page Styling
 const sizes = {
@@ -52,8 +51,28 @@ const HomeContainer = styled.div`
   justify-content: space-evenly;
   margin: 5% auto 5% auto;
   max-width: 82%;
-`;
+ 
 
+  ${media.desktop`
+  width: 90%;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 2fr;
+  margin: 5% auto 18% auto;
+  `}
+
+  ${media.tablet`
+  width: 92%;
+ `}
+
+
+  ${media.phone`
+  width: 95%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr;
+  margin: 5% auto 30% auto;
+  grid-gap: 20px 20px;
+  `}
+  `;
 const Img = styled.img`
   max-height: 100%;
   max-width: 100%;
@@ -63,15 +82,25 @@ const Img = styled.img`
 const PageName = styled.h1`
   max-width: 82%;
   margin: 2% auto 0 auto;
+
+  ${media.desktop`
+  width: 90%;`}
+
+  ${media.tablet`
+  width: 92%;
+  `}
+
+  ${media.phone`
+  width: 95%;`}
 `;
 
 class Home extends Component {
   componentDidMount = () => {
     this.props.getSongs();
-  }
+  };
 
   render() {
-    console.log(this.props)
+    console.log(this.props);
     const songs = this.props.songs;
     console.log(songs);
     return (
@@ -101,10 +130,9 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    songs: state.songs.items
+    songs: state.songs.songs
   };
 };
-
 
 export default connect(
   mapStateToProps,
