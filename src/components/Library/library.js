@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import GlobalStyle from "../../GlobalStyles/globalStyles";
+import GlobalStyle from "../GlobalStyles/globalStyles";
 import styled, { css } from "styled-components";
 import Navigation from "../Navigation/navigation";
 import { Link, Redirect } from "react-router-dom";

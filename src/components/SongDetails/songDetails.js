@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
-import GlobalStyle from "../../GlobalStyles/globalStyles";
+import GlobalStyle from "../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom'
