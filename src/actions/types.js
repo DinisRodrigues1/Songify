@@ -1,5 +1,6 @@
 export const USER_AUTH = "USER_AUTH";
 export const USER_HAS_TOKEN = "USER_HAS_TOKEN";
+export const REGISTER_USER = "REGISTER_USER"
 export const LOGOUT_USER = "LOGOUT_USER";
 export const SONG_FAVORITE = "SONG_FAVORITE";
 export const SONG_UNFAVORITE = "SONG_UNFAVORITE";

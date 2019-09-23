@@ -4,8 +4,11 @@ import GlobalStyle from "../../GlobalStyles/globalStyles";
 import Navigation from "../Navigation/navigation";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
-import { getSong } from "../../actions/songActions";
+import {
+  getSong,
+  addToFavorites,
+  removeFavorite
+} from "../../actions/songActions";
 
 //Page Styling
 const sizes = {
@@ -157,13 +160,18 @@ class songDetails extends Component {
   }
 
   componentDidMount = () => {
-      this.props.getSong(this.props.location.params.song);
+    this.props.getSong(this.props.location.params.song);
 
-  }
+  };
+
+  handleAdd = e => {
+    e.preventDefault();
+    this.props.addToFavorites(this.props.location.params.song);
+  };
 
   render() {
     let detail = this.props.detail;
-    console.log(this.props)
+    console.log(this.props);
     return (
       <>
         <Navigation />
@@ -179,7 +187,7 @@ class songDetails extends Component {
             </p>
             <FadedTxt>
               {detail.year}
-              <FavoriteBtn>
+              <FavoriteBtn onClick={this.handleAdd}>
                 <FavTxt>Favorite</FavTxt>
                 <Heart></Heart>
               </FavoriteBtn>
@@ -195,14 +203,14 @@ class songDetails extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    detail: state.songs.item
+    detail: state.songs.item,
+    auth: state.auth.currentUser
   };
 };
 
-
 export default connect(
   mapStateToProps,
-  { getSong }
+  { getSong, addToFavorites, removeFavorite }
 )(songDetails);

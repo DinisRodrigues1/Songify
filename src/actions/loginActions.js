@@ -1,5 +1,25 @@
-import { USER_AUTH, USER_HAS_TOKEN, LOGOUT_USER } from "./types";
+import { USER_AUTH, USER_HAS_TOKEN, LOGOUT_USER, REGISTER_USER } from "./types";
 import axios from "axios";
+
+export const userRegister = user => {
+    return dispatch => {
+        return axios.post("https://songs-api-ubiwhere.now.sh/api/auth/register", {
+            email: user.email,
+            name: user.name,
+            password: user.password
+        })
+        .then(resp => {
+            if (resp.message) {
+                console.log(resp.message)
+            } else {
+                dispatch({
+                    type: REGISTER_USER,
+                    payload: resp.data
+                })
+        }
+    })
+    }
+}
 
 export const userCheck = user => {
   return dispatch => {
@@ -25,6 +45,7 @@ export const userCheck = user => {
 export const getUser = () => {
   return dispatch => {
     const token = localStorage.token;
+    
     console.log(token);
     if (token) {
       return axios

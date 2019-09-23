@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import GlobalStyle from "../../GlobalStyles/globalStyles";
 import styled, { css } from "styled-components";
 import Navigation from "../Navigation/navigation";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import { connect } from "react-redux";
 import { getUser } from "../../actions/loginActions";
-import { getSongFavorites } from "../../actions/songActions";
+import { getSongFavorites, removeFavorite } from "../../actions/songActions";
 
 //Page Styling
 const sizes = {
@@ -150,16 +150,20 @@ export class Library extends Component {
     this.props.getSongFavorites();
   };
 
-  handleFavorite = id => {
-    //DELTE ID FROM FAVORITES
+  handleFavorite = param => e => {
+    e.preventDefault();
+    this.props.removeFavorite(param);
     console.log("delet dis nefew");
   };
 
   render() {
     const user = this.props.user;
     const favs = this.props.favorite;
+    const token = localStorage.token;
     console.log(this.props);
     return (
+      <>
+      {!token ? <Redirect to="/"/> :
       <>
         <Navigation />
         <PageName>{user.name}'s Library</PageName>
@@ -183,6 +187,8 @@ export class Library extends Component {
           <GlobalStyle />
         </LibraryContainer>
       </>
+    }
+    </>
     );
   }
 }
@@ -196,7 +202,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   getUser: () => dispatch(getUser()),
-  getSongFavorites: () => dispatch(getSongFavorites())
+  getSongFavorites: () => dispatch(getSongFavorites()),
+  removeFavorite: param => dispatch(removeFavorite(param))
 });
 
 export default connect(

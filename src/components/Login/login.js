@@ -10,8 +10,7 @@ import {
 } from "react-router-dom";
 import Navigation from "../Navigation/navigation";
 import { connect } from "react-redux";
-import { userCheck } from "../../actions/loginActions"
-
+import { userCheck } from "../../actions/loginActions";
 
 //Page Styling
 const sizes = {
@@ -72,6 +71,16 @@ const Submit = styled.input`
   }
 `;
 
+const LinkTo = styled(Link)`
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -84,69 +93,87 @@ class Login extends Component {
     };
   }
 
-
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    this.props.userCheck(this.state);
-    
+    try {
+      await this.props.auth.currentUser;
+      await this.props.userCheck(this.state);
+      this.props.history.push("/");
+    } catch (e) {
+      alert(e.message);
+    }
   };
   render() {
-    console.log(this.props)
+    console.log(this.props);
     const token = localStorage.token;
-    
+    console.log(this.props.currentUser)
     return (
-      
       <>
-        <Navigation />
-        <PageName>Login</PageName>
-        <form onSubmit={this.onSubmit}>
-          <LoginContainer>
-            <div>
-              <InputTitle>E-mail</InputTitle>
-              <Input
-                ref={this.inputRef}
-                type="text"
-                name="email"
-                value={this.state.email}
-                onMouseEnter={() => {
-                  this.inputRef.current.focus();
-                }}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div>
-              <InputTitle>Password</InputTitle>
-              <Input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div>
-              <Submit
-                type="submit"
-                name="submit button"
-                value="Entrar"
-              />
-            </div>
-          </LoginContainer>
-        </form>
-        <GlobalStyle />
+        {token ? (
+          <Redirect to="/" />
+        ) : (
+          <>
+            <Navigation />
+            <PageName>Login</PageName>
+            <form onSubmit={this.handleSubmit}>
+              <LoginContainer>
+                <div>
+                  <InputTitle>E-mail</InputTitle>
+                  <Input
+                    ref={this.inputRef}
+                    type="text"
+                    name="email"
+                    value={this.state.email}
+                    onMouseEnter={() => {
+                      this.inputRef.current.focus();
+                    }}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+                <div>
+                  <InputTitle>Password</InputTitle>
+                  <Input
+                    type="password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+                <div>
+                  <p>
+                    Don't have an account? Register{" "}
+                    <LinkTo to="/register">here</LinkTo>.
+                  </p>
+                </div>
+                <div>
+                  <Submit type="submit" name="submit button" value="Entrar" />
+                </div>
+              </LoginContainer>
+            </form>
+
+            <GlobalStyle />
+          </>
+        )}
       </>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    auth: state.auth.currentUser
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   userCheck: userInfo => dispatch(userCheck(userInfo))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Login);

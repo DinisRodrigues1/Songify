@@ -8,7 +8,7 @@ import {
   Route,
   Link,
   NavLink,
-  Redirect
+  withRouter
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/loginActions";
@@ -77,6 +77,10 @@ class Navigation extends Component {
     e.preventDefault();
     localStorage.removeItem("token");
     this.props.logoutUser();
+    this.setState ({
+      data: []
+    })
+   
   };
 
   render() {
@@ -90,7 +94,7 @@ class Navigation extends Component {
               <Home size="27" title="Homepage" />
               <LinkTxt>Home</LinkTxt>
             </NaviLink>
-            <NaviLink Redirect="/" onClick={this.handleClick}>
+            <NaviLink redirect="/" onClick={this.handleClick}>
               <User size="27" title="Logout" />
               <LinkTxt>Logout</LinkTxt>
             </NaviLink>
@@ -109,21 +113,16 @@ class Navigation extends Component {
               <User size="27" title="Login" />
               <LinkTxt>Login</LinkTxt>
             </NaviLink>
-            <NaviLink exact to="/library">
-              <Music size="27" title="Music Library" />
-              <LinkTxt>Library</LinkTxt>
-            </NaviLink>
           </Nav>
         )}
       </>
     );
-    //   login ? return <NaviLink to="/logout"></NaviLink> :
   }
 }
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth.currentUserAuth
+    auth: state.auth.currentUser
   };
 };
 
